@@ -1,10 +1,10 @@
 # -*- coding: iso-8859-1 -*-
 
-from datetime import datetime
 import sqlite3
-#import ttk
 from tkinter import *
+from datetime import datetime
 from tkinter import messagebox as tkMessageBox
+
 
 data_atual = datetime.today().strftime('%d/%m/%Y')
 
@@ -70,17 +70,16 @@ class main:
         cod_produto=self.cod_produto.get()
         nome_produto=self.nome_produto.get()
         data_vencimento_produto=self.data_vencimento_produto.get()
-        #comp=self.comp.get(0.0,END)
         try:
             cur.execute("INSERT INTO produtos VALUES(?,?,?)",
                     (cod_produto,nome_produto,data_vencimento_produto))
+            tkMessageBox.showinfo('Aviso!', 'Produto cadastrado com sucesso!')
         except:
             tkMessageBox.showinfo('Aviso!','Produto já cadastrado')
         con.commit()
         self.cod_produto.delete(0,END)
         self.nome_produto.delete(0, END)
         self.data_vencimento_produto.delete(0, END)
-        tkMessageBox.showinfo('Aviso!', 'Produto cadastrado com sucesso!')
 
 
     def limpaproduto(self):
@@ -100,7 +99,7 @@ DATA DE VENCIMENTO:{} \n \n'''.format(i[0],i[1],i[2]))
 
     def mostraprodutosvencidos(self):
         self.mostra1.delete(0.0, END)
-        cur.execute("SELECT * FROM produtos WHERE data_vencimento_produto <= '%s'" % data_atual)
+        cur.execute("SELECT * FROM produtos WHERE data_vencimento_produto < '%s'" % data_atual)
         consulta = cur.fetchall()
         for i in consulta:
             self.mostra1.insert(END, '''CODIGO DO PRODUTO:{}
