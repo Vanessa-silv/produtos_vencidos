@@ -2,10 +2,14 @@
 ''' Estudo de cadastro e consulta de clientes, em python+sqlite+Tkinter
 por: Volney Casas volneyrock@gmail.com'''
 
+from datetime import datetime
 import sqlite3
 #import ttk
 from tkinter import *
 from tkinter import messagebox as tkMessageBox
+
+data_atual = datetime.today().strftime('%d/%m/%Y')
+
 
 
 #Criar conexão e cursor
@@ -37,12 +41,11 @@ class main:
         self.data_vencimento_produto.place(relx=0.02,rely=0.36,width=200)
 
         self.botaocadastra = Button(self.frame1,text='Cadastrar',font=('Ariel','20'),
-                                    fg='green',command=self.cadastraclientes)
+                                    fg='green',command=self.cadastraproduto)
         self.botaocadastra.place(relx=0.62,rely=0.33,relwidth=0.31)
         self.botaocancela = Button(self.frame1,text='Novo/Cancelar',font=('Ariel','20'),
-                                   fg='red',command=self.limpaclientes)
+                                   fg='red',command=self.limpaproduto)
         self.botaocancela.place(relx=0.62,rely=0.44,relwidth=0.31)
-
 
 
         self.frame2 = Frame(master,bg='sky blue')
@@ -51,10 +54,10 @@ class main:
         self.frame2.place(relx=0.51,rely=0.0,relheight=0.31,relwidth=0.49)
         Label(self.frame2,text='CONSULTAR',font=('Ariel','20'),bg='sky blue').place(relx=0.35,rely=0.05)
         self.fonec=Entry(self.frame2,font=('Ariel','20'))
-        self.fonec.bind("<Return>",self.mostraclientes_a)
+        self.fonec.bind("<Return>",self.mostraprodutos_a)
         #self.fonec.place(relx=0.22,rely=0.42)
         self.botaook = Button(self.frame2, text='TODOS PRODUTOS',font=('Ariel','15'),
-                              fg='green',command=self.mostraclientes)
+                              fg='green',command=self.mostraprodutos)
         self.botaook.place(relx=0.00,rely=0.65)
         self.botaovencidos = Button(self.frame2, text='PRODUTOS VENCIDOS',font=('Ariel','15'),
                               fg='green',command=self.mostraprodutosvencidos)
@@ -70,7 +73,7 @@ class main:
 
 
 #-----------------------------------------FUNÇÕES-----------------------------------------------------------#
-    def cadastraclientes(self):
+    def cadastraproduto(self):
         cod_produto=self.cod_produto.get()
         nome_produto=self.nome_produto.get()
         data_vencimento_produto=self.data_vencimento_produto.get()
@@ -87,16 +90,14 @@ class main:
         tkMessageBox.showinfo('Aviso!', 'Produto cadastrado com sucesso!')
 
 
-    def limpaclientes(self):
+    def limpaproduto(self):
         self.cod_produto.delete(0,END)
         self.nome_produto.delete(0,END)
         self.data_vencimento_produto.delete(0,END)
 
 
-    def mostraclientes(self):
+    def mostraprodutos(self):
         self.mostra1.delete(0.0,END)
-        fonec = self.fonec.get()
-        #cur.execute("SELECT * FROM clientes WHERE telefone = '%s'" %fonec)
         cur.execute("SELECT * FROM produtos")
         consulta = cur.fetchall()
         for i in consulta:
@@ -106,7 +107,7 @@ DATA DE VENCIMENTO:{} \n \n'''.format(i[0],i[1],i[2]))
 
     def mostraprodutosvencidos(self):
         self.mostra1.delete(0.0, END)
-        cur.execute("SELECT * FROM produtos WHERE data_vencimento_produto <= '18/11/2020'")
+        cur.execute("SELECT * FROM produtos WHERE data_vencimento_produto <= '%s'" % data_atual)
         consulta = cur.fetchall()
         for i in consulta:
             self.mostra1.insert(END, '''CODIGO DO PRODUTO:{}
@@ -114,8 +115,8 @@ PRODUTO:{}
 DATA DE VENCIMENTO:{} \n \n'''.format(i[0], i[1], i[2]))
 
 # Função q aceita eventos do teclado, apenas chama a função mostraclientes quando a tecla Enter é pressionada
-    def mostraclientes_a(self,event):
-        self.mostraclientes()
+    def mostraprodutos_a(self,event):
+        self.mostraprodutos()
 
 
 root = Tk()
