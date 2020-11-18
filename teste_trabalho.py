@@ -49,9 +49,6 @@ class main:
         self.frame2.configure(borderwidth="2")
         self.frame2.place(relx=0.51,rely=0.0,relheight=0.31,relwidth=0.49)
         Label(self.frame2,text='CONSULTAR',font=('Ariel','20'),bg='sky blue').place(relx=0.35,rely=0.05)
-        self.fonec=Entry(self.frame2,font=('Ariel','20'))
-        self.fonec.bind("<Return>",self.mostraprodutos_a)
-        #self.fonec.place(relx=0.22,rely=0.42)
         self.botaook = Button(self.frame2, text='TODOS PRODUTOS',font=('Ariel','15'),
                               fg='green',command=self.mostraprodutos)
         self.botaook.place(relx=0.00,rely=0.65)
@@ -109,10 +106,6 @@ DATA DE VENCIMENTO:{} \n \n'''.format(i[0],i[1],i[2]))
             self.mostra1.insert(END, '''CODIGO DO PRODUTO:{}
 PRODUTO:{}
 DATA DE VENCIMENTO:{} \n \n'''.format(i[0], i[1], i[2]))
-
-# Função q aceita eventos do teclado, apenas chama a função mostraclientes quando a tecla Enter é pressionada
-    def mostraprodutos_a(self,event):
-        self.mostraprodutos()
 
 
 root = Tk()
