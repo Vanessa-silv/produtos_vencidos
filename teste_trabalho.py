@@ -1,6 +1,4 @@
 # -*- coding: iso-8859-1 -*-
-''' Estudo de cadastro e consulta de clientes, em python+sqlite+Tkinter
-por: Volney Casas volneyrock@gmail.com'''
 
 from datetime import datetime
 import sqlite3
@@ -9,8 +7,6 @@ from tkinter import *
 from tkinter import messagebox as tkMessageBox
 
 data_atual = datetime.today().strftime('%d/%m/%Y')
-
-
 
 #Criar conexão e cursor
 con = sqlite3.connect('banco_produtos3.db')
