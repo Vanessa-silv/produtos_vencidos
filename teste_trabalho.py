@@ -6,10 +6,10 @@ from datetime import datetime
 from tkinter import messagebox as tkMessageBox
 
 
-data_atual = datetime.today().strftime('%d/%m/%Y 00:00:00')
+data_atual = datetime.today().strftime('%Y-%m-%d')
 
 #Criar conexão e cursor
-con = sqlite3.connect('banco_produtos4.db')
+con = sqlite3.connect('banco_produtos7.db')
 cur = con.cursor()
 
 #Criar tabela clientes
@@ -69,7 +69,7 @@ class main:
     def cadastraproduto(self):
         cod_produto=self.cod_produto.get()
         nome_produto=self.nome_produto.get()
-        data_vencimento_produto=self.data_vencimento_produto.get() + ' 00:00:00'
+        data_vencimento_produto=self.data_vencimento_produto.get().split("/")[2]+'-'+self.data_vencimento_produto.get().split("/")[1]+'-'+self.data_vencimento_produto.get().split("/")[0]
         try:
             cur.execute("INSERT INTO produtos VALUES(?,?,?)",
                     (cod_produto,nome_produto,data_vencimento_produto))
@@ -93,18 +93,20 @@ class main:
         cur.execute("SELECT * FROM produtos")
         consulta = cur.fetchall()
         for i in consulta:
+            produtos = i[2].split("-")[2] + '/' + i[2].split("-")[1] + '/' + i[2].split("-")[0]
             self.mostra1.insert(END,'''CODIGO DO PRODUTO:{}
 PRODUTO:{}
-DATA DE VENCIMENTO:{} \n \n'''.format(i[0],i[1],i[2].split(" ")[0]))
+DATA DE VENCIMENTO:{} \n \n'''.format(i[0],i[1],produtos))
 
     def mostraprodutosvencidos(self):
         self.mostra1.delete(0.0, END)
         cur.execute("SELECT * FROM produtos WHERE data_vencimento_produto <= '%s'" % data_atual)
         consulta = cur.fetchall()
         for i in consulta:
+            venc_prod = i[2].split("-")[2]+'/'+i[2].split("-")[1]+'/'+i[2].split("-")[0]
             self.mostra1.insert(END, '''CODIGO DO PRODUTO:{}
 PRODUTO:{}
-DATA DE VENCIMENTO:{} \n \n'''.format(i[0], i[1], i[2].split(" ")[0]))
+DATA DE VENCIMENTO:{} \n \n'''.format(i[0], i[1], venc_prod ))
 
 
 root = Tk()
