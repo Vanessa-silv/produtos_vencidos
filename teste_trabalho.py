@@ -12,7 +12,7 @@ data_atual = datetime.today().strftime('%Y-%m-%d')
 con = sqlite3.connect('banco_produtos7.db')
 cur = con.cursor()
 
-#Criar tabela clientes
+#Criar tabela produtos
 cur.execute("""CREATE TABLE IF NOT EXISTS produtos (
             cod_produto VARCHAR PRIMARY KEY,
             nome_produto VARCHAR,
@@ -49,11 +49,11 @@ class main:
         self.frame2.configure(borderwidth="2")
         self.frame2.place(relx=0.51,rely=0.0,relheight=0.31,relwidth=0.49)
         Label(self.frame2,text='CONSULTAR',font=('Ariel','20'),bg='sky blue').place(relx=0.35,rely=0.05)
-        self.botaook = Button(self.frame2, text='TODOS PRODUTOS',font=('Ariel','15'),
+        self.botaotodosprodutos = Button(self.frame2, text='TODOS PRODUTOS',font=('Ariel','15'),
                               fg='green',command=self.mostraprodutos)
-        self.botaook.place(relx=0.00,rely=0.65)
+        self.botaotodosprodutos.place(relx=0.00,rely=0.65)
         self.botaovencidos = Button(self.frame2, text='PRODUTOS VENCIDOS',font=('Ariel','15'),
-                              fg='green',command=self.mostraprodutosvencidos)
+                              fg='red',command=self.mostraprodutosvencidos)
         self.botaovencidos.place(relx=0.62,rely=0.65)
 
 
@@ -100,7 +100,7 @@ DATA DE VENCIMENTO:{} \n \n'''.format(i[0],i[1],produtos))
 
     def mostraprodutosvencidos(self):
         self.mostra1.delete(0.0, END)
-        cur.execute("SELECT * FROM produtos WHERE data_vencimento_produto <= '%s'" % data_atual)
+        cur.execute("SELECT * FROM produtos WHERE data_vencimento_produto < '%s'" % data_atual)
         consulta = cur.fetchall()
         for i in consulta:
             venc_prod = i[2].split("-")[2]+'/'+i[2].split("-")[1]+'/'+i[2].split("-")[0]
